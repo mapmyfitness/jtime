@@ -1,8 +1,9 @@
+#! /usr/bin/env python
 
 from setuptools import setup, find_packages
-import sys, os
 
-setup(name='jtime',
+setup(
+    name='jtime',
     version='0.1',
     description="Jira time tracking tool built on the command line to take context from your various git repositories.",
     long_description="Jira time tracking tool built on the command line to take context from your various git repositories.",
@@ -11,7 +12,6 @@ setup(name='jtime',
     author='MapMyFitness',
     author_email='',
     url='https://github.com/bnekolny/jtime',
-    license='GNU GENERAL PUBLIC LICENSE Version 2',
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     include_package_data=True,
     zip_safe=False,
@@ -22,9 +22,18 @@ setup(name='jtime',
         ### Required for testing
         # "nose",
         # "coverage",
+        ### General requirements -- TODO: pin versions
+        "jira",
+        "GitPython==0.1.7",
+        "python-dateutil",
+        "argh",
+        "argcomplete",
         ],
     setup_requires=[],
-    entry_points="""
-    """,
+    entry_points={
+        'console_scripts': [
+            'jtime = jtime.jtime:main',
+        ]
+    },
     namespace_packages=[],
     )
