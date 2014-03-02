@@ -1,5 +1,5 @@
 [run]
-source=mapmyfitness
+source=jtime
 
 [report]
 omit =
