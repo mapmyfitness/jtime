@@ -1,0 +1,7 @@
+[run]
+source=mapmyfitness
+
+[report]
+omit =
+    */python?.?/*
+    */site-packages/nose/*
