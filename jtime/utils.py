@@ -52,6 +52,7 @@ def working_cycletime(start, end, workday_start=datetime.timedelta(hours=0), wor
     return cycle_time
 
 
+# Could we override the class to add this on import instead?
 def timedelta_total_seconds(td):
     if sys.version_info >= (2, 7):
         return td.total_seconds()

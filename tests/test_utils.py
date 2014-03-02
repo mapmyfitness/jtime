@@ -34,3 +34,12 @@ class JtimeUtilsTestCase(unittest.TestCase):
 
         self.assertEquals(utils.timedelta_total_seconds(one_day), one_day_sec)
         self.assertEquals(utils.timedelta_total_seconds(one_hr), one_hr_sec)
+
+    def test_working_cycletime(self):
+        mon_noon = datetime.datetime(2014, 3, 3, 12)
+        cycle_time = utils.working_cycletime(mon_noon, (mon_noon + datetime.timedelta(hours=1)))
+
+        self.assertEquals(cycle_time, (1 / 24.0))  # 1hr of 24 total
+
+    def test_working_cycletime_no_start(self):
+        self.assertEquals(utils.working_cycletime(None, None, None, None), None)
