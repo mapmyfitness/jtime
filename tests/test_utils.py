@@ -42,4 +42,4 @@ class JtimeUtilsTestCase(unittest.TestCase):
         self.assertEquals(cycle_time, (1 / 24.0))  # 1hr of 24 total
 
     def test_working_cycletime_no_start(self):
-        self.assertEquals(utils.working_cycletime(None, None, None, None), None)
+        self.assertEquals(utils.working_cycletime(None, None), None)
