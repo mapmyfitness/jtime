@@ -13,5 +13,5 @@ script:
   - "nosetests --with-coverage --cover-package jtime"
 after_script:
   # Report coverage results to coveralls.io
-  #- pip install coveralls
-  #- coveralls
+  - pip install coveralls
+  - coveralls
