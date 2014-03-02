@@ -2,7 +2,11 @@
 import base64
 import mock
 import os
-import unittest
+import sys
+if sys.version_info < (2, 7):
+    import unittest2 as unittest
+else:
+    import unittest
 
 from jtime import configuration
 from jtime import custom_exceptions
