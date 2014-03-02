@@ -6,6 +6,7 @@ import unittest
 
 from jtime import configuration
 from jtime import custom_exceptions
+from jtime import jtime
 
 
 class JtimeConfigurationTestCase(unittest.TestCase):
@@ -39,3 +40,7 @@ class JtimeConfigurationTestCase(unittest.TestCase):
     def test_load_config__NotConfigured(self):
         with self.assertRaises(custom_exceptions.NotConfigured):
             configuration.load_config()
+
+    @mock.patch('jtime.utils.get_input', side_effect=['user', 'pass'])
+    def test_jtime_configure(self, input):
+        jtime.configure()
