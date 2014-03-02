@@ -23,6 +23,7 @@ setup(
         "nose",
         "coverage",
         "mock",
+        "unittest2",
         ### General requirements -- TODO: pin versions
         "jira",
         "GitPython==0.1.7",
