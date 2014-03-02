@@ -25,6 +25,8 @@ def working_cycletime(start, end, workday_start=datetime.timedelta(hours=0), wor
 
     if not start:
         return None
+    if not end:
+        end = datetime.datetime.now()
 
     zero = datetime.timedelta(0)
     # Make sure that the work day is valid

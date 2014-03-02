@@ -43,3 +43,7 @@ class JtimeUtilsTestCase(unittest.TestCase):
 
     def test_working_cycletime_no_start(self):
         self.assertEquals(utils.working_cycletime(None, None), None)
+
+    def test_working_cycletime_no_end(self):
+        # making sure it's a very small number because we said start was now and end was assumed as now
+        assert utils.working_cycletime(datetime.datetime.now(), None) < (1 / (24.0 * 60))
