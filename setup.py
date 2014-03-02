@@ -20,8 +20,9 @@ setup(
         ### Required to build documentation
         # "Sphinx >= 1.0",
         ### Required for testing
-        # "nose",
-        # "coverage",
+        "nose",
+        "coverage",
+        "mock",
         ### General requirements -- TODO: pin versions
         "jira",
         "GitPython==0.1.7",
