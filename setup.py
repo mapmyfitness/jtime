@@ -24,6 +24,7 @@ setup(
         "coverage",
         "mock",
         "unittest2",
+        "httpretty",
         ### General requirements -- TODO: pin versions
         "jira",
         "GitPython==0.1.7",
