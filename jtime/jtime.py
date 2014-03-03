@@ -81,10 +81,14 @@ def status():
 
             time_spent = worklog_hash.get('timeSpent', '0m')
 
-            created = dateutil.parser.parse(worklog_hash['created']).astimezone(tzlocal())
+            created = dateutil.parser.parse(worklog_hash['started'])
+            created_pattern = '%a %x         '  # Adding extra space for formatting
+            if not created.hour == created.minute == created.second == 0:
+                created = created.astimezone(tzlocal())
+                created_pattern = '%a %x %I:%M %p'
             comment = worklog_hash.get('comment', '<no comment>')
 
-            updated_string = created.strftime("%a %x %I:%M %p")
+            updated_string = created.strftime(created_pattern)
             print "  %s - %s (%s): %s" % (updated_string, author, time_spent, comment)
     else:
         print "  No worklogs"
