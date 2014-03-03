@@ -18,9 +18,11 @@ class JtimeGitTestCase(unittest.TestCase):
         pass
 
     def test_init_repo_InvalidGitRepository(self):
-        git.Repo.__init__ = mock.Mock(side_effect=git.errors.InvalidGitRepositoryError)
-        with self.assertRaises(SystemExit):
-            git_ext.GIT()
+        with mock.patch('git.Repo.__init__') as mock_git_init:
+            mock_git_init.side_effect = git.errors.InvalidGitRepositoryError
+
+            with self.assertRaises(SystemExit):
+                git_ext.GIT()
 
     def test_branch(self):
         type(self.repo).active_branch = mock.PropertyMock(
