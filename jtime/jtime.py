@@ -5,6 +5,7 @@ import dateutil.parser
 from dateutil.tz import tzlocal
 import datetime
 import getpass
+import webbrowser
 import sys
 
 import configuration
@@ -34,7 +35,32 @@ def configure():
     username = utils.get_input(raw_input, "username")
     password = utils.get_input(getpass.getpass, "password")
     configuration._save_config(jira_url, username, password)
-    
+
+
+def browse():
+    """
+    Open the current JIRA issue in a web browser
+    """
+    branch = git.branch
+    issue = jira.get_issue(branch)
+    if not issue:
+        return
+
+    try:
+        webbrowser.open("%s/browse/%s" % (configured.get('jira').get('host'), issue))
+    except Exception as ex:
+        print "Unable to open issue %s in the browser: %s" % (issue, str(ex))
+
+
+def timesheet():
+    """
+    Open the user's JIRA timesheet in a web browser
+    """
+    try:
+        webbrowser.open("%s/secure/TempoUserBoard!timesheet.jspa" % configured.get('jira').get('host'))
+    except Exception as ex:
+        print "Unable to open timesheet in the browser: %s" % str(ex)
+
 
 def status():
     """
@@ -244,5 +270,5 @@ def main():
         init()
 
     parser = argparse.ArgumentParser()
-    argh.add_commands(parser, [configure, log, mark, status, me, reopen])
+    argh.add_commands(parser, [browse, configure, log, mark, status, me, reopen, timesheet])
     argh.dispatch(parser)
