@@ -1,13 +1,11 @@
 import base64
 import ConfigParser
-import custom_exceptions
 import os
+import sys
+import urllib
 
+import custom_exceptions
 
-# TODO: Need to remove this, have it be passed in with the user
-config = { 
-    'host': 'https://mapmyfitness.atlassian.net'
-}
 
 _config = os.path.expanduser('~/.jtime.ini')
 
@@ -19,14 +17,14 @@ def load_config():
     configuration = MyParser()
     configuration.read(_config)
 
-    d = dict(config.items() + configuration.as_dict().items())
+    d = configuration.as_dict()
 
     if 'jira' not in d: raise custom_exceptions.NotConfigured
 
     return d
 
 
-def _save_config(username, password):
+def _save_config(jira_url, username, password):
     """
     Saves the username and password to the config
     """
@@ -38,6 +36,18 @@ def _save_config(username, password):
     if not config.has_section('jira'):
         config.add_section('jira')
 
+    if 'http' not in jira_url:
+        jira_url = 'http://' + jira_url
+
+    try:
+        urllib.urlopen(jira_url)
+    except IOError, e:
+        print "It doesn't appear that {0} is responding to a request.\
+               Please make sure that you typed the hostname, \
+               i.e. jira.atlassian.com.\n{1}".format(jira_url, e)
+        sys.exit(1)
+
+    config.set('jira', 'url', jira_url)
     config.set('jira', 'username', username)
     config.set('jira', 'password', base64.b64encode(password))
 

@@ -18,7 +18,7 @@ def jira_connection(config):
     if _jira_connection:
         return _jira_connection
     else:
-        jira_options = {'server': config['host']}
+        jira_options = {'server': config.get('jira').get('url')}
 
         cookies = configuration._get_cookies_as_dict()
         jira_connection = jira_ext.JIRA(options=jira_options)

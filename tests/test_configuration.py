@@ -1,5 +1,6 @@
 """ Tests for jtime configuration module. """
 import base64
+import httpretty
 import mock
 import os
 import sys
@@ -27,15 +28,25 @@ class JtimeConfigurationTestCase(unittest.TestCase):
         if os.path.exists(self.config_file_path):
             os.remove(self.config_file_path)
 
+    @httpretty.activate
     def test__save_config(self):
-        configuration._save_config('', '')
+        httpretty.register_uri(httpretty.GET, 'http://jira.atlassian.com')
+        configuration._save_config('jira.atlassian.com', '', '')
 
         assert os.path.exists(self.config_file_path)
 
+    @mock.patch('urllib.urlopen', side_effect=IOError)
+    def test__save_config_url_not_found(self, patch):
+        with self.assertRaises(SystemExit):
+            configuration._save_config('url', '', '')
+
+    @httpretty.activate
     def test_load_config(self):
+        httpretty.register_uri(httpretty.GET, 'http://jira.atlassian.com', status=200)
+        jira_url = 'jira.atlassian.com'
         username = 'test_user'
         password = 'test_pass'
-        configuration._save_config(username, password)
+        configuration._save_config(jira_url, username, password)
         config_dict = configuration.load_config()
 
         assert username == config_dict.get('jira').get('username')
@@ -45,8 +56,10 @@ class JtimeConfigurationTestCase(unittest.TestCase):
         with self.assertRaises(custom_exceptions.NotConfigured):
             configuration.load_config()
 
-    @mock.patch('jtime.utils.get_input', side_effect=['user', 'pass'])
+    @httpretty.activate
+    @mock.patch('jtime.utils.get_input', side_effect=['jira.atlassian.com', 'user', 'pass'])
     def test_jtime_configure(self, input):
+        httpretty.register_uri(httpretty.GET, 'http://jira.atlassian.com', status=200)
         jtime.configure()
 
     def test__save_cookie(self):

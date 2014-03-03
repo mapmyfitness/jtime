@@ -30,9 +30,10 @@ def configure():
     """
     Update config
     """
+    jira_url = utils.get_input(raw_input, "Jira url")
     username = utils.get_input(raw_input, "username")
     password = utils.get_input(getpass.getpass, "password")
-    configuration._save_config(username, password)
+    configuration._save_config(jira_url, username, password)
     
 
 def status():
