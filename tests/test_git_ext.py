@@ -18,6 +18,9 @@ class JtimeGitTestCase(unittest.TestCase):
         pass
 
     def test_branch(self):
+        type(self.repo).active_branch = mock.PropertyMock(
+            return_value='test'
+        )
         self.assertNotEqual(self.repo.branch, None)
 
     def test_branch_raises_InvalidGitRepositoryError(self):
