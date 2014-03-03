@@ -1,0 +1,5 @@
+nose
+coverage
+mock
+unittest2
+httpretty
