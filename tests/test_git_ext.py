@@ -33,3 +33,15 @@ class JtimeGitTestCase(unittest.TestCase):
             side_effect=git.errors.InvalidGitRepositoryError
         )
         self.repo.branch
+
+    def test_get_last_commit_message(self):
+        type(self.repo).active_branch = mock.PropertyMock(
+            return_value='master'
+        )
+        self.assertIsInstance(self.repo.get_last_commit_message(), basestring)
+
+    def test_get_last_commit_message_raises_InvalidGitRepositoryError(self):
+        type(self.repo).active_branch = mock.PropertyMock(
+            side_effect=git.errors.InvalidGitRepositoryError
+        )
+        self.assertEquals(self.repo.get_last_commit_message(), None)
