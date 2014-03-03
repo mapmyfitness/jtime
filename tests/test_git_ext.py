@@ -17,6 +17,11 @@ class JtimeGitTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_init_repo_InvalidGitRepository(self):
+        git.Repo.__init__ = mock.Mock(side_effect=git.errors.InvalidGitRepositoryError)
+        with self.assertRaises(SystemExit):
+            git_ext.GIT()
+
     def test_branch(self):
         type(self.repo).active_branch = mock.PropertyMock(
             return_value='test'
