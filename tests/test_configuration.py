@@ -12,13 +12,13 @@ else:
 from jtime import configuration
 from jtime import custom_exceptions
 from jtime import jtime
+import utils
 
 
 class JtimeConfigurationTestCase(unittest.TestCase):
     def setUp(self):
-        self.config_file_path = os.path.abspath('.jtime.ini')
-        self._config_patch = mock.patch('jtime.configuration._config',
-                                        self.config_file_path)
+        self.config_file_path = utils.config_filepath
+        self._config_patch = utils.config_path_patcher
         self._config_patch.start()
 
     def tearDown(self):
