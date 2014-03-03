@@ -1,3 +1,4 @@
+from __future__ import division  # This allows division to stay as a float
 import datetime
 import sys
 
