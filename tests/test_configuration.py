@@ -48,3 +48,16 @@ class JtimeConfigurationTestCase(unittest.TestCase):
     @mock.patch('jtime.utils.get_input', side_effect=['user', 'pass'])
     def test_jtime_configure(self, input):
         jtime.configure()
+
+    def test__save_cookie(self):
+        configuration._save_cookie('test', 'cookie')
+
+        assert os.path.exists(self.config_file_path)
+
+    def test__get_cookies_as_dict(self):
+        cookie_name = 'test'
+        cookie_value = 'cookie'
+        configuration._save_cookie(cookie_name, cookie_value)
+        cookie_dict = configuration._get_cookies_as_dict()
+
+        self.assertEquals(cookie_dict.get(cookie_name), cookie_value)
