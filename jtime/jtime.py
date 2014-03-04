@@ -203,7 +203,6 @@ def me(show_all=False, show_inprogress=False, show_open=False, quiet=False):
 
     jql += " ORDER BY updated DESC "
 
-    print jql
     results = jira.search_issues(jql)
 
     for result in results:
