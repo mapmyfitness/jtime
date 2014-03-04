@@ -1,6 +1,6 @@
 jtime
 =====
-[![Build Status](https://travis-ci.org/mapmyfitness/jtime.png?branch=jtime-browser)](https://travis-ci.org/mapmyfitness/jtime)
+[![Build Status](https://travis-ci.org/mapmyfitness/jtime.png?branch=master)](https://travis-ci.org/mapmyfitness/jtime)
 [![Coverage Status](https://coveralls.io/repos/mapmyfitness/jtime/badge.png)](https://coveralls.io/r/mapmyfitness/jtime)
 
 jtime - A simple tool that provides git-aware time-tracking against JIRA issues without having to leave the command-line.
