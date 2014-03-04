@@ -162,43 +162,35 @@ def mark():
 
 
 @argh.arg('-a', '--include-all', help='Include all issues that are not Closed')
-@argh.arg('-i', help='Include issues that are In Progress (DEFAULT)')
-@argh.arg('-o', help='Include issues that are Open')
-@argh.arg('-d', help='Include issues that are Ready for Devint QA')
-@argh.arg('-c', help='Include issues that are Ready for Code Review')
-@argh.arg('-p', help='Include issues that are Ready for Production Deployment')
+@argh.arg('-i', '--include-inprogress', help='Include issues that are In Progress (DEFAULT)')
+@argh.arg('-o', '--include-open', help='Include issues that are Open')
 @argh.arg('-q', '--quiet', help='Quiet, does not includes issue title')
-def me(include_all=False, i=False, o=False, d=False, c=False, p=False, quiet=False):
+def me(include_all=False, include_inprogress=False, include_open=False, quiet=False):
     """
     Prints a list of the users tickets and provides filtering options
     """
-    issue_statuses = []
+    status_exclusions = ['Backlog', 'Open', 'In Progress', 'Closed']
 
-    default = not [arg for arg in sys.argv[2:] if arg not in ('-q', '--quiet')]
-
-    if include_all or o:
-        issue_statuses.append("Open")
-
-    if include_all or i or default:
-        issue_statuses.append("In Progress")
-
-    if include_all or d or default:
-        issue_statuses.append("Ready for Devint QA")
-
-    if include_all or c or default:
-        issue_statuses.append("Ready for Code Review")
-
-    if include_all or p:
-        issue_statuses.append("Ready for Production Deployment")
+    if include_inprogress:
+        status_exclusions.remove('In Progress')
+    if include_open:
+        status_exclusions.remove('Open')
+    elif include_all:
+        status_exclusions = ['Closed']
 
     jql = \
         """
-            status in (
-                %s
-            )
-            AND assignee in (currentUser())
+            assignee=currentUser()
+            AND resolved is EMPTY
+        """
+    # We are switching between showing everything and only showing in progress items
+    if not include_all and not include_open:
+        jql += ' AND status was "In Progress" '
+    jql += \
+        """
+            AND status not in ({0})
             ORDER BY updated DESC
-        """ % (','.join('"' + issue_status + '"' for issue_status in issue_statuses))
+        """.format((','.join('"' + issue_status + '"' for issue_status in status_exclusions)))
 
     results = jira.search_issues(jql)
 
