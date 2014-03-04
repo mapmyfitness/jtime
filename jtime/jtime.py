@@ -161,21 +161,25 @@ def mark():
               (branch, issue.fields.status.name)
 
 
-@argh.arg('-a', '--include-all', help='Include all issues that are not Closed')
-@argh.arg('-i', '--include-inprogress', help='Include issues that are In Progress (DEFAULT)')
-@argh.arg('-o', '--include-open', help='Include issues that are Open')
+@argh.arg('-a', '--show-all', help='Include all issues that are not Closed')
+@argh.arg('-i', '--show-inprogress', help='Show only issues that are In Progress')
+@argh.arg('-o', '--show-open', help='Show only issues that are Open')
 @argh.arg('-q', '--quiet', help='Quiet, does not includes issue title')
-def me(include_all=False, include_inprogress=False, include_open=False, quiet=False):
+def me(show_all=False, show_inprogress=False, show_open=False, quiet=False):
     """
     Prints a list of the users tickets and provides filtering options
     """
-    status_exclusions = ['Backlog', 'Open', 'In Progress', 'Closed']
+    default = not [arg for arg in sys.argv[2:] if arg not in ('-q', '--quiet')]
 
-    if include_inprogress:
-        status_exclusions.remove('In Progress')
-    if include_open:
-        status_exclusions.remove('Open')
-    elif include_all:
+    status_exclusions = ['Backlog', 'Open', 'Closed']
+    status_inclusions = []
+
+    if show_inprogress or default:
+        status_inclusions.append('In Progress')
+    if show_open:
+        status_exclusions = []
+        status_inclusions.append('Open')
+    elif show_all:
         status_exclusions = ['Closed']
 
     jql = \
@@ -184,14 +188,22 @@ def me(include_all=False, include_inprogress=False, include_open=False, quiet=Fa
             AND resolved is EMPTY
         """
     # We are switching between showing everything and only showing in progress items
-    if not include_all and not include_open:
+    if not show_all and not show_open:
         jql += ' AND status was "In Progress" '
-    jql += \
-        """
-            AND status not in ({0})
-            ORDER BY updated DESC
-        """.format((','.join('"' + issue_status + '"' for issue_status in status_exclusions)))
 
+    inclusion_str = None
+    if len(status_inclusions):
+        inclusion_str = "status in ({0})".format((','.join('"' + issue_status + '"' for issue_status in status_inclusions)))
+    exclusion_str = None
+    if len(status_exclusions):
+        exclusion_str = "status not in ({0})".format((','.join('"' + issue_status + '"' for issue_status in status_exclusions)))
+    jql += " AND ( {0} {1} {2} ) ".format(inclusion_str if inclusion_str else "",
+                                          " OR " if inclusion_str and exclusion_str else "",
+                                          exclusion_str if exclusion_str else "")
+
+    jql += " ORDER BY updated DESC "
+
+    print jql
     results = jira.search_issues(jql)
 
     for result in results:
@@ -237,4 +249,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     argh.add_commands(parser, [configure, log, mark, status, me, reopen])
+    #try:
     argh.dispatch(parser)
+    #except:
+        #print "Caught the exception."
