@@ -2,7 +2,10 @@
 import datetime
 import httpretty
 import os
-import unittest
+if sys.version_info < (2, 7):
+    import unittest2 as unittest
+else:
+    import unittest
 
 from jtime import jira_ext
 from jtime import connection
