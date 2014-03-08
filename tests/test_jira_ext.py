@@ -19,13 +19,7 @@ class JtimeJiraExtTestCase(unittest.TestCase):
         utils.httpretty_connection_process()
         self.jira = connection.jira_connection(utils.config)
 
-        json_file_path = os.path.join(os.path.dirname(__file__), 'jira_issue.json')
-        with open(json_file_path) as json_file:
-            self.jira_issue_json_str = json_file.read()
-        httpretty.register_uri(httpretty.GET,
-                               'http://jira.atlassian.com/rest/api/2/issue/ARCHIVE-1',
-                               body = self.jira_issue_json_str)
-
+        utils.httpretty_get_issue('jira_issue.json')
         self.issue = self.jira.get_issue('ARCHIVE-1')
 
     def tearDown(self):
@@ -63,10 +57,7 @@ class JtimeJiraExtTestCase(unittest.TestCase):
 
     @httpretty.activate
     def test_get_cycle_time_from_string(self):
-        httpretty.register_uri(httpretty.GET,
-                               'http://jira.atlassian.com/rest/api/2/issue/ARCHIVE-1',
-                               body = self.jira_issue_json_str)
-
+        utils.httpretty_get_issue('jira_issue.json')
         cycletime = self.jira.get_cycle_time('ARCHIVE-1')
         self.assertIsInstance(cycletime, float)
 

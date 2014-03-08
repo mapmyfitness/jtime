@@ -5,6 +5,17 @@ import mock
 import os
 
 
+def httpretty_get_issue(fname):
+    json_file_path = os.path.join(os.path.dirname(__file__), fname)
+
+    with open(json_file_path) as json_file:
+        jira_issue_json_str = json_file.read()
+
+    httpretty.register_uri(httpretty.GET,
+                           'http://jira.atlassian.com/rest/api/2/issue/ARCHIVE-1',
+                           body=jira_issue_json_str)
+
+
 def httpretty_connection_process():
     httpretty.register_uri(httpretty.GET, 'http://jira.atlassian.com')
 
