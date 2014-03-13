@@ -152,6 +152,7 @@ def mark():
         print "Set mark at %s on %s by touching last work log" % (mark_time, branch)
     else:
         # If we don't have worklogs, mark the issue as in progress if that is an available transition
+        jira.workflow_transition(issue, 'Open')
         marked = jira.workflow_transition(issue, 'In Progress')
         mark_time = datetime.datetime.now(dateutil.tz.tzlocal()).strftime("%I:%M %p")
         print 'Set mark at %s on %s by changing status to "In Progress"' % (mark_time, branch)

@@ -3,6 +3,7 @@ import ConfigParser
 import os
 import sys
 import urllib
+import urlparse
 
 import custom_exceptions
 
@@ -40,7 +41,9 @@ def _save_config(jira_url, username, password):
         jira_url = 'http://' + jira_url
 
     try:
-        urllib.urlopen(jira_url)
+        resp = urllib.urlopen(jira_url)
+        url = urlparse.urlparse(resp.url)
+        jira_url = url.scheme + "://" + url.netloc
     except IOError, e:
         print "It doesn't appear that {0} is responding to a request.\
                Please make sure that you typed the hostname, \

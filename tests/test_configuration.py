@@ -41,6 +41,19 @@ class JtimeConfigurationTestCase(unittest.TestCase):
             configuration._save_config('url', '', '')
 
     @httpretty.activate
+    def test__save_config_url_redirect(self):
+        https_url = 'https://jira.atlassian.com'
+        httpretty.register_uri(httpretty.GET, 'http://jira.atlassian.com',
+                               status=301, location=https_url)
+        httpretty.register_uri(httpretty.GET, https_url)
+        configuration._save_config('http://jira.atlassian.com', '', '')
+
+        assert os.path.exists(self.config_file_path)
+        config_dict = configuration.load_config()
+        assert config_dict.get('jira').get('url') == https_url
+
+
+    @httpretty.activate
     def test_load_config(self):
         httpretty.register_uri(httpretty.GET, 'http://jira.atlassian.com', status=200)
         jira_url = 'jira.atlassian.com'
