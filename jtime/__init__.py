@@ -4,4 +4,4 @@ __description__ = "Jira time tracking tool built on the command line to take con
 __keywords__ = 'jira time track command-line'
 __author__ = 'MapMyFitness'
 __url__ = 'http://github.com/mapmyfitness/jtime'
-__version__ = '0.5.1'
+__version__ = '0.5.2'
