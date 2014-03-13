@@ -6,11 +6,16 @@ python:
 install:
   - "python setup.py install"
   - "pip install -r test_requirements.txt"
-#  - "pip install flake8==2.1.0"
-# command to run tests
+  - "pip install flake8"
 script:
-#  - "flake8 --ignore=E501 jtime"
+    # Running PEP8 compliance
+  - "flake8 --ignore=E501 jtime"
+    # Running the unit tests
   - "nosetests --with-coverage --cover-package jtime"
+    # Testing the distribution creation
+  - "python setup.py sdist"
+    # Testing the distribution installation
+  - "find ./dist -iname '*.tar.gz' -print0 | xargs -0 pip install"
 after_script:
   # Report coverage results to coveralls.io
   - pip install coveralls
