@@ -1,7 +1,8 @@
 """ Tests around the jira extension module. """
 import datetime
 import httpretty
-import os
+import jira
+import mock
 import sys
 if sys.version_info < (2, 7):
     import unittest2 as unittest
@@ -38,6 +39,10 @@ class JtimeJiraExtTestCase(unittest.TestCase):
                                status=404)
 
         self.jira.get_issue('ARCHIVE-1')
+
+    @mock.patch('jira.client.JIRA.issue', side_effect=jira.exceptions.JIRAError)
+    def test_get_issue_JIRAError(self, patch):
+        self.jira.get_issue('BAD-ISSUE')
 
     def test_get_worklog(self):
         worklogs = self.jira.get_worklog(self.issue)
