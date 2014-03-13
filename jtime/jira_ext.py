@@ -16,7 +16,7 @@ class JIRA(jira.client.JIRA):
     def get_issue(self, branch):
         """
         Gets the JIRA issue associated with the branch name.
-    
+
         Returns None if no issue with this branch name.
         """
         if branch:
@@ -41,17 +41,17 @@ class JIRA(jira.client.JIRA):
         marked in progress)
         """
         last_mark = None
-    
+
         # Get the last mark from the work logs
         worklogs = self.get_worklog(issue)
         if worklogs:
             last_worklog = worklogs[-1]
             last_mark = dateutil.parser.parse(last_worklog.raw['updated'])
-    
+
         # If no worklogs, get the time since the issue was marked In Progress
         if not last_mark:
             last_mark = self.get_datetime_issue_in_progress(issue)
-    
+
         if last_mark:
             now = datetime.datetime.now(dateutil.tz.tzlocal())
             delta = now - last_mark
@@ -73,7 +73,7 @@ class JIRA(jira.client.JIRA):
                 self.transition_issue(issue, transition_id)
                 print "Changed status of issue %s to %s" % (issue.key, status_name)
                 return True
-    
+
         print "Unable to change status of issue %s to %s" % (issue.key, status_name)
 
     def get_datetime_issue_in_progress(self, issue):

@@ -2,30 +2,24 @@
 
 from setuptools import setup, find_packages
 
+import jtime
+
 setup(
-    name='jtime',
-    version='0.1',
-    description="Jira time tracking tool built on the command line to take context from your various git repositories.",
-    long_description="Jira time tracking tool built on the command line to take context from your various git repositories.",
-    classifiers=[], 
+    name=jtime.__name__,
+    version=jtime.__version__,
+    description=jtime.__description__,
+    long_description=open('README.md').read(),
+    classifiers=[],
     keywords='',
-    author='MapMyFitness',
+    author=jtime.__author__,
     author_email='',
-    url='https://github.com/bnekolny/jtime',
+    url=jtime.__url__,
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     include_package_data=True,
     zip_safe=False,
     test_suite='nose.collector',
-    install_requires=[
-        ### Required to build documentation
-        # "Sphinx >= 1.0",
-        ### General requirements -- TODO: pin versions
-        "jira",
-        "GitPython==0.1.7",
-        "python-dateutil",
-        "argh",
-        "argcomplete",
-        ],
+    install_requires=open('requirements.txt').read().splitlines(),
+    tests_require=open('test_requirements.txt').read().splitlines(),
     setup_requires=[],
     entry_points={
         'console_scripts': [
@@ -33,4 +27,4 @@ setup(
         ]
     },
     namespace_packages=[],
-    )
+)

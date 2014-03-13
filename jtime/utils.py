@@ -12,6 +12,7 @@ def get_input(input_func, input_str):
         val = input_func("You didn't enter a valid {0}, please try again: ".format(input_str))
     return val
 
+
 def working_cycletime(start, end, workday_start=datetime.timedelta(hours=0), workday_end=datetime.timedelta(hours=24)):
     """
     Get the working time between a beginning and an end point subtracting out non-office time

@@ -20,7 +20,8 @@ def load_config():
 
     d = configuration.as_dict()
 
-    if 'jira' not in d: raise custom_exceptions.NotConfigured
+    if 'jira' not in d:
+        raise custom_exceptions.NotConfigured
 
     return d
 

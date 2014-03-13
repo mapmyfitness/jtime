@@ -18,6 +18,7 @@ configured = None
 jira = None
 git = None
 
+
 def init():
     global configured, jira, git
     # Initialize the connectors
@@ -34,7 +35,7 @@ def configure():
     username = utils.get_input(raw_input, "username")
     password = utils.get_input(getpass.getpass, "password")
     configuration._save_config(jira_url, username, password)
-    
+
 
 def status():
     """
@@ -103,7 +104,7 @@ def status():
         print '\n\033[0;32m%s elapsed\033[00m (use "jtime log ." to log elapsed time or "jtime log <duration> (ex. 30m, 1h etc.)" to log a specific amount of time)' % (elapsed_time)
     else:
         print '\n\033[0;32m0m elapsed\033[00m'
-    
+
 
 @argh.arg('duration', help='Use . to log all time elapsed since the last mark or provide a specific amount of time to log (ex. 30m, 1h)')
 @argh.arg('-m', '--message', help='A message to add to this work log')

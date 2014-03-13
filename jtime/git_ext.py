@@ -2,6 +2,7 @@ import sys
 import git
 from git.errors import InvalidGitRepositoryError
 
+
 class GIT(git.Repo):
     def __init__(self, **kwargs):
         try:
@@ -14,7 +15,7 @@ class GIT(git.Repo):
     def branch(self):
         """
         Gets the active branch in the current repo.
-    
+
         Returns None if not in a git repo or no current branch
         """
         branch = None
