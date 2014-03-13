@@ -9,8 +9,7 @@ setup(
     version=jtime.__version__,
     description=jtime.__description__,
     long_description=open('README.md').read(),
-    classifiers=[],
-    keywords='',
+    keywords=jtime.__keywords__,
     author=jtime.__author__,
     author_email='',
     url=jtime.__url__,
@@ -27,4 +26,12 @@ setup(
         ]
     },
     namespace_packages=[],
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Topic :: Internet :: WWW/HTTP',
+    ],
 )
