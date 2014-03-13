@@ -5,3 +5,4 @@ source=jtime
 omit =
     */python?.?/*
     */site-packages/nose/*
+    */tests/*
