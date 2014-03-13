@@ -73,6 +73,6 @@ Set mark at 08:35 AM on SOC-2355 by touching last work log
 
 ## Installation
 ```
-pip install <TBD>
+pip install jtime
 jtime config
 ```
