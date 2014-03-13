@@ -8,7 +8,7 @@ setup(
     name=jtime.__name__,
     version=jtime.__version__,
     description=jtime.__description__,
-    long_description=open('README.md').read(),
+    #long_description=open('README.md').read(),
     keywords=jtime.__keywords__,
     author=jtime.__author__,
     author_email='',
