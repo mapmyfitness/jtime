@@ -1,5 +1,5 @@
 include README.md
 include LICENSE
 include *.txt
-prune dir tests
-prune dir dist
+prune tests
+prune dist
