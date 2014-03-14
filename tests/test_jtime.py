@@ -38,6 +38,7 @@ class JtimeTestCase(unittest.TestCase):
         self.assertNotEquals(jtime.git, None)
 
     def test_jtime_log(self):
-        with mock.patch('jtime.git_ext.GIT') as mock_git:
-            type(mock_git).branch = mock.PropertyMock(return_value='ARCHIVE-1')
+        with mock.patch('jtime.git_ext.GIT.branch', new_callable=mock.PropertyMock) as mock_git_branch:
+            mock_git_branch.return_value = 'ARCHIVE-1'
+            #type(mock_git).branch = mock.PropertyMock(return_value='ARCHIVE-1')
             jtime.status()

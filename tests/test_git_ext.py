@@ -35,7 +35,10 @@ class JtimeGitTestCase(unittest.TestCase):
             self.repo.branch
 
     def test_get_last_commit_message(self):
-        self.assertIsInstance(self.repo.get_last_commit_message(), basestring)
+        # Since travis-ci doesn't operate on a branch but a commit
+        with mock.patch('jtime.git_ext.GIT.active_branch', new_callable=mock.PropertyMock) as mock_active_branch:
+            mock_active_branch.return_value = self.repo.heads[0].name
+            self.assertIsInstance(self.repo.get_last_commit_message(), basestring)
 
     def test_get_last_commit_message_raises_InvalidGitRepositoryError(self):
         with mock.patch('jtime.git_ext.GIT.active_branch', new_callable=mock.PropertyMock) as mock_active_branch:
