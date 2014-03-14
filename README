@@ -1,7 +1,7 @@
 jtime
 =====
 
-|Build Status| |Coverage Status|
+|Build Status| |Coverage Status| |PyPi version| |PyPi downloads|
 
 jtime - A simple tool that provides git-aware time-tracking against JIRA
 issues without having to leave the command-line.
@@ -85,3 +85,7 @@ Installation
    :target: https://travis-ci.org/mapmyfitness/jtime
 .. |Coverage Status| image:: https://coveralls.io/repos/mapmyfitness/jtime/badge.png
    :target: https://coveralls.io/r/mapmyfitness/jtime
+.. |PyPi version| image:: https://pypip.in/v/jtime/badge.png
+   :target: https://crate.io/packages/jtime/
+.. |PyPi downloads| image:: https://pypip.in/d/jtime/badge.png
+   :target: https://crate.io/packages/jtime/
