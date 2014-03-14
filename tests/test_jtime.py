@@ -12,8 +12,11 @@ import utils
 
     
 class JtimeTestCase(unittest.TestCase):
-    @httpretty.activate
+    #@httpretty.activate
     def setUp(self):
+        # Activate http mocking
+        httpretty.enable()
+
         self.config_file_path = utils.config_filepath
         self._config_patch = utils.config_path_patcher
         self._config_patch.start()
@@ -31,6 +34,10 @@ class JtimeTestCase(unittest.TestCase):
         # Delete the configuration file if we've created it
         if os.path.exists(self.config_file_path):
             os.remove(self.config_file_path)
+
+        # Can't forget to stop http mocking since this whole TC uses it
+        httpretty.disable()
+        httpretty.reset()
         
     def test_jtime_init(self):
         self.assertNotEquals(jtime.configured, None)
