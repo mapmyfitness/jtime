@@ -4,7 +4,9 @@ import argparse
 import dateutil.parser
 from dateutil.tz import tzlocal
 import datetime
+import logging
 import getpass
+import os
 import sys
 
 import configuration
@@ -12,6 +14,9 @@ import connection
 import custom_exceptions
 import git_ext
 import utils
+
+
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.ERROR)
 
 
 configured = None
@@ -34,7 +39,10 @@ def configure():
     jira_url = utils.get_input(raw_input, "Jira url")
     username = utils.get_input(raw_input, "username")
     password = utils.get_input(getpass.getpass, "password")
-    configuration._save_config(jira_url, username, password)
+    error_reporting = True \
+        if 'n' not in raw_input("Can we collect any errors from your usage? [y]/N: ").lower() \
+        else False
+    configuration._save_config(jira_url, username, password, error_reporting)
 
 
 def status():
@@ -241,16 +249,50 @@ def main():
     """
     Set up the context and connectors
     """
-
     try:
         init()
     except custom_exceptions.NotConfigured:
         configure()
         init()
+    # Adding this in case users are trying to run without adding a jira url.
+    # I would like to take this out in a release or two.
+    # TODO: REMOVE
+    except AttributeError:
+        logging.error('It appears that your configuration may not match what is expected '
+                      'Please reconfigure the app and try again.')
+        configure()
+        init()
 
     parser = argparse.ArgumentParser()
     argh.add_commands(parser, [configure, log, mark, status, me, reopen])
-    #try:
-    argh.dispatch(parser)
-    #except:
-        #print "Caught the exception."
+
+    # Putting the error logging after the app is initialized because
+    # we want to adhere to the user's preferences
+    try:
+        argh.dispatch(parser)
+    # We don't want to report keyboard interrupts to rollbar
+    except (KeyboardInterrupt, SystemExit):
+        raise
+    except:
+        if configured.get('jira').get('error_reporting', True):
+            # Configure rollbar so that we report errors
+            import rollbar
+            from . import __version__ as version
+            root_path = os.path.dirname(os.path.realpath(__file__))
+            rollbar.init('7541b8e188044831b6728fa8475eab9f', 'v%s' % version, root=root_path)
+            logging.error('Sorry. It appears that there was an error when handling your command. '
+                          'This error has been reported to our error tracking system. To disable '
+                          'this reporting, please re-configure the app: `jtime config`.')
+            extra_data = {
+                # grab the command that we're running
+                'cmd': sys.argv[1],
+                # we really don't want to see jtime in the args
+                'args': sys.argv[2:],
+                # lets grab anything useful, python version?
+                'python': str(sys.version),
+            }
+            # We really shouldn't thit this line of code when running tests, so let's not cover it.
+            rollbar.report_exc_info(extra_data=extra_data)  # pragma: no cover
+        else:
+            logging.error('It appears that there was an error when handling your command.')
+            raise
