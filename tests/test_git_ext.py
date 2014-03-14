@@ -39,7 +39,8 @@ class JtimeGitTestCase(unittest.TestCase):
         # Since travis-ci doesn't operate on a branch but a commit
         with mock.patch('jtime.git_ext.GIT.active_branch', new_callable=mock.PropertyMock) as mock_active_branch:
             # The GitPython library doesn't actually have a way in 0.1.7 to get the current commit which is what we need on travis
-            mock_active_branch.return_value = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip('\n')
+            mock_active_branch.return_value = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE, bufsize=0).communicate()[0].strip('\n')
+            #mock_active_branch.return_value = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip('\n')
             self.assertIsInstance(self.repo.get_last_commit_message(), basestring)
 
     def test_get_last_commit_message_raises_InvalidGitRepositoryError(self):
