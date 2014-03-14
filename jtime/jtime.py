@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argh
 import argparse
+import ConfigParser
 import dateutil.parser
 from dateutil.tz import tzlocal
 import datetime
@@ -257,7 +258,7 @@ def main():
     # Adding this in case users are trying to run without adding a jira url.
     # I would like to take this out in a release or two.
     # TODO: REMOVE
-    except AttributeError:
+    except (AttributeError, ConfigParser.NoOptionError):
         logging.error('It appears that your configuration is invalid, please reconfigure the app and try again.')
         configure()
         init()
