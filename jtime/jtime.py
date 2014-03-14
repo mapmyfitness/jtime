@@ -40,7 +40,7 @@ def configure():
     username = utils.get_input(raw_input, "username")
     password = utils.get_input(getpass.getpass, "password")
     error_reporting = True \
-        if 'n' not in raw_input("Can we collect any errors from your usage? [y]/N: ").lower() \
+        if 'n' not in raw_input("Would you like to automatically report errors to help improve the software? [y]/N: ").lower() \
         else False
     configuration._save_config(jira_url, username, password, error_reporting)
 
