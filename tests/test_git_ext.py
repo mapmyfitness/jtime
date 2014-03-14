@@ -1,6 +1,7 @@
 """ Tests for the jtime git_ext module. """
 import git
 import mock
+import subprocess
 import sys
 if sys.version_info < (2, 7):
     import unittest2 as unittest
@@ -37,7 +38,8 @@ class JtimeGitTestCase(unittest.TestCase):
     def test_get_last_commit_message(self):
         # Since travis-ci doesn't operate on a branch but a commit
         with mock.patch('jtime.git_ext.GIT.active_branch', new_callable=mock.PropertyMock) as mock_active_branch:
-            mock_active_branch.return_value = self.repo.heads[0].name
+            # The GitPython library doesn't actually have a way in 0.1.7 to get the current commit which is what we need on travis
+            mock_active_branch.return_value = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip('\n')
             self.assertIsInstance(self.repo.get_last_commit_message(), basestring)
 
     def test_get_last_commit_message_raises_InvalidGitRepositoryError(self):
