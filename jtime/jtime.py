@@ -258,8 +258,7 @@ def main():
     # I would like to take this out in a release or two.
     # TODO: REMOVE
     except AttributeError:
-        logging.error('It appears that your configuration may not match what is expected '
-                      'Please reconfigure the app and try again.')
+        logging.error('It appears that your configuration is invalid, please reconfigure the app and try again.')
         configure()
         init()
 
