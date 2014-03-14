@@ -19,7 +19,7 @@ class JtimeTestCase(unittest.TestCase):
         self._config_patch.start()
 
         utils.httpretty_connection_process()
-        configuration._save_config('jira.atlassian.com', '', '')
+        configuration._save_config('jira.atlassian.com', '', '', True)
         jtime.init()
 
         utils.httpretty_get_issue('jira_issue.json')

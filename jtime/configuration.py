@@ -23,10 +23,13 @@ def load_config():
     if 'jira' not in d:
         raise custom_exceptions.NotConfigured
 
+    # Special handling of the boolean for error reporting
+    d['jira']['error_reporting'] = configuration.getboolean('jira', 'error_reporting')
+
     return d
 
 
-def _save_config(jira_url, username, password):
+def _save_config(jira_url, username, password, error_reporting):
     """
     Saves the username and password to the config
     """
@@ -54,6 +57,7 @@ def _save_config(jira_url, username, password):
     config.set('jira', 'url', jira_url)
     config.set('jira', 'username', username)
     config.set('jira', 'password', base64.b64encode(password))
+    config.set('jira', 'error_reporting', str(error_reporting))
 
     with open(_config, 'w') as ini:
         os.chmod(_config, 0600)

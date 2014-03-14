@@ -31,14 +31,14 @@ class JtimeConfigurationTestCase(unittest.TestCase):
     @httpretty.activate
     def test__save_config(self):
         httpretty.register_uri(httpretty.GET, 'http://jira.atlassian.com')
-        configuration._save_config('jira.atlassian.com', '', '')
+        configuration._save_config('jira.atlassian.com', '', '', True)
 
         assert os.path.exists(self.config_file_path)
 
     @mock.patch('urllib.urlopen', side_effect=IOError)
     def test__save_config_url_not_found(self, patch):
         with self.assertRaises(SystemExit):
-            configuration._save_config('url', '', '')
+            configuration._save_config('url', '', '', True)
 
     @httpretty.activate
     def test__save_config_url_redirect(self):
@@ -46,7 +46,7 @@ class JtimeConfigurationTestCase(unittest.TestCase):
         httpretty.register_uri(httpretty.GET, 'http://jira.atlassian.com',
                                status=301, location=https_url)
         httpretty.register_uri(httpretty.GET, https_url)
-        configuration._save_config('http://jira.atlassian.com', '', '')
+        configuration._save_config('http://jira.atlassian.com', '', '', True)
 
         assert os.path.exists(self.config_file_path)
         config_dict = configuration.load_config()
@@ -59,7 +59,7 @@ class JtimeConfigurationTestCase(unittest.TestCase):
         jira_url = 'jira.atlassian.com'
         username = 'test_user'
         password = 'test_pass'
-        configuration._save_config(jira_url, username, password)
+        configuration._save_config(jira_url, username, password, True)
         config_dict = configuration.load_config()
 
         assert username == config_dict.get('jira').get('username')
@@ -72,6 +72,9 @@ class JtimeConfigurationTestCase(unittest.TestCase):
     @httpretty.activate
     @mock.patch('jtime.utils.get_input', side_effect=['jira.atlassian.com', 'user', 'pass'])
     def test_jtime_configure(self, input):
+        # This is not ideal, but was how I could figure out how to mock out the raw input call.
+        # It could very easily conflict with other raw input calls in that module.
+        jtime.raw_input = lambda _: 'y'
         httpretty.register_uri(httpretty.GET, 'http://jira.atlassian.com', status=200)
         jtime.configure()
 
