@@ -25,25 +25,19 @@ class JtimeGitTestCase(unittest.TestCase):
                 git_ext.GIT()
 
     def test_branch(self):
-        type(self.repo).active_branch = mock.PropertyMock(
-            return_value='test'
-        )
-        self.assertNotEqual(self.repo.branch, None)
+        with mock.patch('jtime.git_ext.GIT.active_branch', new_callable=mock.PropertyMock) as mock_active_branch:
+            mock_active_branch.return_value = 'test'
+            self.assertNotEqual(self.repo.branch, None)
 
     def test_branch_raises_InvalidGitRepositoryError(self):
-        type(self.repo).active_branch = mock.PropertyMock(
-            side_effect=git.errors.InvalidGitRepositoryError
-        )
-        self.repo.branch
+        with mock.patch('jtime.git_ext.GIT.active_branch', new_callable=mock.PropertyMock) as mock_active_branch:
+            mock_active_branch.side_effect=git.errors.InvalidGitRepositoryError
+            self.repo.branch
 
     def test_get_last_commit_message(self):
-        type(self.repo).active_branch = mock.PropertyMock(
-            return_value='master'
-        )
         self.assertIsInstance(self.repo.get_last_commit_message(), basestring)
 
     def test_get_last_commit_message_raises_InvalidGitRepositoryError(self):
-        type(self.repo).active_branch = mock.PropertyMock(
-            side_effect=git.errors.InvalidGitRepositoryError
-        )
-        self.assertEquals(self.repo.get_last_commit_message(), None)
+        with mock.patch('jtime.git_ext.GIT.active_branch', new_callable=mock.PropertyMock) as mock_active_branch:
+            mock_active_branch.side_effect = git.errors.InvalidGitRepositoryError
+            self.assertEquals(self.repo.get_last_commit_message(), None)

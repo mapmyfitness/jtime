@@ -291,7 +291,8 @@ def main():
                 # lets grab anything useful, python version?
                 'python': str(sys.version),
             }
-            rollbar.report_exc_info(extra_data=extra_data)
+            # We really shouldn't thit this line of code when running tests, so let's not cover it.
+            rollbar.report_exc_info(extra_data=extra_data)  #pragma: no cover
         else:
             logging.error('It appears that there was an error when handling your command.')
             raise
