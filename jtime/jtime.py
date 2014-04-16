@@ -171,7 +171,7 @@ def mark():
 
     if not marked:
         print "ERROR: Issue %s is has a status of %s and has no worklogs.  You must log some time or re-open the issue to proceed." % \
-              (branch, issue.fields.status.name)
+            (branch, issue.fields.status.name)
 
 
 @argh.arg('-a', '--show-all', help='Include all issues that are not Closed')
@@ -270,7 +270,8 @@ def main():
     # Now simply auto-discovering the methods listed in this module
     current_module = sys.modules[__name__]
     module_methods = [getattr(current_module, a, None) for a in dir(current_module)
-            if isinstance(getattr(current_module, a, None), types.FunctionType) and a != 'main']
+                      if isinstance(getattr(current_module, a, None), types.FunctionType)
+                      and a != 'main']
     argh.add_commands(parser, module_methods)
 
     # Putting the error logging after the app is initialized because
