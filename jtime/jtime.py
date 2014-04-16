@@ -152,6 +152,8 @@ def mark():
     """
     branch = git.branch
     issue = jira.get_issue(branch)
+    if not issue:
+        return
     worklogs = jira.get_worklog(issue)
 
     marked = False
