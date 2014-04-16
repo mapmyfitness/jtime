@@ -9,6 +9,7 @@ import logging
 import getpass
 import os
 import sys
+import types
 
 import configuration
 import connection
@@ -132,7 +133,6 @@ def log(duration, message=None, use_last_commit_message=False):
         comment = git.get_last_commit_message()
 
     if issue:
-
         # If the duration is provided use it, otherwise use the elapsed time since the last mark
         duration = jira.get_elapsed_time(issue) if duration == '.' else duration
 
@@ -266,7 +266,12 @@ def main():
         init()
 
     parser = argparse.ArgumentParser()
-    argh.add_commands(parser, [configure, log, mark, status, me, reopen])
+
+    # Now simply auto-discovering the methods listed in this module
+    current_module = sys.modules[__name__]
+    module_methods = [getattr(current_module, a, None) for a in dir(current_module)
+            if isinstance(getattr(current_module, a, None), types.FunctionType) and a != 'main']
+    argh.add_commands(parser, module_methods)
 
     # Putting the error logging after the app is initialized because
     # we want to adhere to the user's preferences
