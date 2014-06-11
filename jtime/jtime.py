@@ -7,6 +7,7 @@ from dateutil.tz import tzlocal
 import datetime
 import logging
 import getpass
+import jira
 import os
 import sys
 import types
@@ -281,8 +282,10 @@ def main():
     # We don't want to report keyboard interrupts to rollbar
     except (KeyboardInterrupt, SystemExit):
         raise
-    except:
-        if configured.get('jira').get('error_reporting', True):
+    except Exception as e:
+        if isinstance(e, jira.exceptions.JIRAError) and "HTTP 400" in e:
+            logging.warning('It appears that your authentication with {0} is invalid. Please re-configure jtime: `jtime configure` with the correct credentials'.format(configuration.load_config['jira'].get('url')))
+        elif configured.get('jira').get('error_reporting', True):
             # Configure rollbar so that we report errors
             import rollbar
             from . import __version__ as version

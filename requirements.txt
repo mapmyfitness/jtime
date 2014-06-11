@@ -1,5 +1,5 @@
 # TODO: pin versions to ranges
-jira
+jira<=0.23
 GitPython==0.1.7
 python-dateutil
 argh
