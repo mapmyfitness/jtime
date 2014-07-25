@@ -53,7 +53,7 @@ def configure():
         connection.jira_connection(configuration.load_config())
     except jira_exceptions.JIRAError as e:
         configuration._delete_config()
-        logging.error("You have an error in your jira connection/configuration: {error}. Please fix the configuration before attempting to use jtime.".format(error=e))
+        logging.error("You have an error in your jira connection/configuration: {error}. Please fix the configuration before attempting to use jtime.\n We suggest trying your username without using the email address.".format(error=e))
 
 def status():
     """
