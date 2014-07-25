@@ -7,7 +7,9 @@ from dateutil.tz import tzlocal
 import datetime
 import logging
 import getpass
-import jira
+
+from jira import exceptions as jira_exceptions
+
 import os
 import sys
 import types
@@ -23,7 +25,7 @@ logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.ERROR)
 
 
 configured = None
-jira_connection = None
+jira = None
 git = None
 
 
@@ -31,7 +33,7 @@ def init():
     global configured, jira, git
     # Initialize the connectors
     configured = configuration.load_config()
-    jira_connection = connection.jira_connection(configured)
+    jira = connection.jira_connection(configured)
     git = git_ext.GIT()
 
 
@@ -49,7 +51,7 @@ def configure():
 
     try:
         connection.jira_connection(configuration.load_config())
-    except jira.exceptions.JIRAError as e:
+    except jira_exceptions.JIRAError as e:
         configuration._delete_config()
         logging.error("You have an error in your jira connection/configuration: {error}. Please fix the configuration before attempting to use jtime.".format(error=e))
 
