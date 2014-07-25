@@ -47,6 +47,11 @@ def configure():
         else False
     configuration._save_config(jira_url, username, password, error_reporting)
 
+    try:
+        connection.jira_connection(configuration.load_config())
+    except jira.exceptions.JIRAError as e:
+        configuration._delete_config()
+        logging.error("You have an error in your jira connection/configuration: {error}. Please fix the configuration before attempting to use jtime.".format(error=e))
 
 def status():
     """

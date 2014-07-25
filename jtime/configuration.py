@@ -29,6 +29,10 @@ def load_config():
     return d
 
 
+def _delete_config():
+    os.path.exists(_config) and os.remove(_config)
+
+
 def _save_config(jira_url, username, password, error_reporting):
     """
     Saves the username and password to the config
