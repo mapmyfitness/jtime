@@ -23,7 +23,7 @@ logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.ERROR)
 
 
 configured = None
-jira = None
+jira_connection = None
 git = None
 
 
@@ -31,7 +31,7 @@ def init():
     global configured, jira, git
     # Initialize the connectors
     configured = configuration.load_config()
-    jira = connection.jira_connection(configured)
+    jira_connection = connection.jira_connection(configured)
     git = git_ext.GIT()
 
 
