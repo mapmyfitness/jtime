@@ -6,6 +6,7 @@ import unittest
 #from nose.tools import ok_, eq_, raises
 #from nose import SkipTest
 
+import jira
 from jtime import jtime
 from jtime import configuration
 import utils
@@ -49,3 +50,7 @@ class JtimeTestCase(unittest.TestCase):
             mock_git_branch.return_value = 'ARCHIVE-1'
             #type(mock_git).branch = mock.PropertyMock(return_value='ARCHIVE-1')
             jtime.status()
+
+    @mock.patch('urllib.urlopen', side_effect=jira.exceptions.JIRAError)
+    def test__save_config_http401(self, patch):
+        jtime.configure()

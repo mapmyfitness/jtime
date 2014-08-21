@@ -1,4 +1,5 @@
 import sys
+import subprocess
 import git
 from git.errors import InvalidGitRepositoryError
 
@@ -39,3 +40,12 @@ class GIT(git.Repo):
         except InvalidGitRepositoryError:
             print "Not in a git repo"
             return None
+
+    def get_last_modified_timestamp(self):
+        """
+        Looks at the files in a git root directory and grabs the last modified timestamp
+        """
+        cmd = "find . -print0 | xargs -0 stat -f '%T@ %p' | sort -n | tail -1 | cut -f2- -d' '"
+        ps = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+        output = ps.communicate()[0]
+        print output

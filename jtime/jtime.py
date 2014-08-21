@@ -59,6 +59,7 @@ def status():
     """
     Gets the worklog status for the current branch
     """
+    import pdb; pdb.set_trace()
     branch = git.branch
     issue = jira.get_issue(branch)
     if not issue:
@@ -122,6 +123,10 @@ def status():
         print '\n\033[0;32m%s elapsed\033[00m (use "jtime log ." to log elapsed time or "jtime log <duration> (ex. 30m, 1h etc.)" to log a specific amount of time)' % (elapsed_time)
     else:
         print '\n\033[0;32m0m elapsed\033[00m'
+
+
+def lmts():
+    print git.get_last_modified_timestamp()
 
 
 @argh.arg('duration', help='Use . to log all time elapsed since the last mark or provide a specific amount of time to log (ex. 30m, 1h)')
