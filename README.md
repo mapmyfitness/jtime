@@ -2,8 +2,8 @@ jtime
 =====
 [![Build Status](https://travis-ci.org/mapmyfitness/jtime.png?branch=master)](https://travis-ci.org/mapmyfitness/jtime)
 [![Coverage Status](https://coveralls.io/repos/mapmyfitness/jtime/badge.png)](https://coveralls.io/r/mapmyfitness/jtime)
-[![PyPi version](https://pypip.in/v/jtime/badge.png)](https://crate.io/packages/jtime/)
-[![PyPi downloads](https://pypip.in/d/jtime/badge.png)](https://crate.io/packages/jtime/)
+[![PyPi version](https://img.shields.io/pypi/v/jtime.svg)](https://crate.io/packages/jtime/)
+[![PyPi downloads](https://img.shields.io/pypi/dm/jtime.svg)](https://crate.io/packages/jtime/)
 
 jtime - A simple tool that provides git-aware time-tracking against JIRA issues without having to leave the command-line.
 
