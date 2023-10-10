@@ -1,6 +1,6 @@
 # TODO: pin versions to ranges
 jira<=0.23
-GitPython==0.1.7
+GitPython==3.1.37
 python-dateutil
 argh
 argcomplete
